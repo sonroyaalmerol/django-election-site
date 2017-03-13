@@ -119,5 +119,15 @@ def electionstop(request):
 def electionreset(request):
     candidates = Candidate.objects.all().update(votes=0)
     voters = User.objects.all().update(is_active=True)
+    setting = Setting.objects.get(name="started")
+    setting.value = "0"
     messages.success(request, 'Successfully reset election!')
+    return redirect("/admin/")
+
+@staff_member_required(login_url='/login/')
+@login_required
+def electionfinalize(request):
+    setting = Setting.objects.get(name="started")
+    setting.value = "2"
+    messages.success(request, 'Election finalized!')
     return redirect("/admin/")

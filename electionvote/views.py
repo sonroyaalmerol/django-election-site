@@ -38,11 +38,11 @@ def login(request):
                     except ObjectDoesNotExist:
                         started = Setting(name="started", value="0")
                         started.save()
-                    if int(started.value) == 1:
-                        messages.error(request, 'You have already casted your vote. Kindly wait for the election to end to see the results.')
-                    else:
+                    if int(started.value) == 2:
                         auth_login(request, user)
                         messages.success(request, 'Successfully logged in!')
+                    else:
+                        messages.error(request, 'You have already casted your vote. Kindly wait for the election to end to see the results.')
                     return redirect("/")
             else:
                 messages.error(request, 'This account does not exist.')

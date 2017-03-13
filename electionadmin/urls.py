@@ -11,5 +11,6 @@ urlpatterns = [
 	url(r'^candidate/delete/(?P<pk>\d+)/$', views.deletecandidate, name='deletecandidate'),
 	url(r'^election/start/$', views.electionstart, name='electionstart'),
 	url(r'^election/stop/$', views.electionstop, name='electionstop'),
+	url(r'^election/finalize/$', views.electionfinalize, name='electionfinalize'),
 	url(r'^election/reset/$', views.electionreset, name='electionreset'),
 ]
