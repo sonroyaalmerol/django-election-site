@@ -12,6 +12,7 @@ from electionsite.settings import SECRET_KEY, EMAIL_FROM
 from django.core.mail import send_mail
 from .models import Setting
 import hashlib
+from django.template import loader
 
 # Create your views here.
 
@@ -39,7 +40,14 @@ def generate(request):
         user = User.objects.create_user(username, email, password)
         user.save()
 
-    send_mail('Voter Account Credentials', 'Here are your credentials for voting<br>Please be reminded that you can only vote once using this account.<br><br>Username: %s<br>Password: %s<br><br>Use these credentials to login! Thank you!<br>' % (username, password), "Election Bot <%s>" % (EMAIL_FROM), emails)
+    html_message = loader.render_to_string(
+            'email.html',
+            {
+                'username': username,
+                'password': password,
+            }
+        )
+    send_mail('Voter Account Credentials', '', "Election Bot <%s>" % (EMAIL_FROM), emails, html_message=html_message)
 
     messages.success(request, 'Successfully added voters!')
     # Get email addresses then hash them to username and password then send to email
