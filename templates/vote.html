@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Voting Form</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="{% static 'assets/js/jquery-1.10.2.js' %}" type="text/javascript"></script>
+	<script src="{% static 'assets/js/jquery.checkboxes-1.2.0.min.js' %}" type="text/javascript"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+</head>
+<body>
+	<div class="container">
+		 <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+			 {% for message in messages %}
+						<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+				{% endfor %}
+				 <div class="panel panel-info" >
+					 <div class="panel-heading">
+							 <div class="panel-title">Voting Form</div>
+					 </div>
+					 <div style="padding-top:30px" class="panel-body" >
+
+							 <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+							 <form class="form-horizontal" role="form" method="post" action="/submit/">
+								 {% csrf_token %}
+								<table class="table table-condensed table-striped" id="candidates" data-toggle="checkboxes" data-max="7">
+									<tbody>
+										{% for candidate in candidates %}
+										<tr>
+											<td><label><input name="votes[]" type="checkbox" value="{{ candidate.pk }}"> {{ candidate.name }} ({{ candidate.nickname }})</label><br><i>{{ candidate.description }}</i></td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+											 <div style="margin-top:10px" class="form-group">
+													 <!-- Button -->
+
+													 <div class="col-sm-12 controls">
+														 <input type="submit" id="btn-login" href="#" class="btn btn-success btn-block" value="Submit">
+													 </div>
+											 </div>
+									 </form>
+							 </div>
+					 </div>
+		 </div>
+ </div>
+</body>
+
+</html>

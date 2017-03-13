@@ -1,0 +1,33 @@
+{
+  "name": "django-election-site",
+  "description": "A simple election web app",
+  "repository": "https://github.com/saalmerol/django-election-site",
+  "keywords": ["python", "django", "site", "election"],
+  "env": {
+    "DJANGO_SECRET_KEY": {
+      "description": "A randomly generated secret to secure your Django installation",
+      "generator": "secret"
+    },
+    "EMAIL_FROM": {
+      "description": "Email that your recipient will see as the sender",
+    },
+    "EMAIL_HOST": {
+      "description": "Hostname of your email service provider",
+    },
+    "EMAIL_HOST_USER": {
+      "description": "Username of account from email service provider",
+    },
+    "EMAIL_HOST_PASSWORD": {
+      "description": "Password of account from email service provider",
+    },
+    "EMAIL_PORT": {
+      "description": "Port used by email service provider",
+    }
+  },
+  "addons": [
+    "heroku-postgresql:hobby-dev",
+  ],
+  "scripts": {
+    "postdeploy": "python manage.py migrate --noinput; python init.py"
+  }
+}
