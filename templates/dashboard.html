@@ -74,7 +74,7 @@
 								<tbody>
 									{% for voter in voters %}
 									<tr>
-										<td><label>{{ voter.email }} | {{ voter.username }} | {{ voter.email|getpassword }}</label></td>
+										<td><label>{{ voter.email }}</label></td>
 										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';">Delete Voter</button></td>{% endif %}
 									</tr>
 									{% endfor %}
