@@ -22,6 +22,17 @@
 			 {% for message in messages %}
 						<div class="alert alert-{{ message.tags }}">{{ message }}</div>
 				{% endfor %}
+				<div class="panel panel-info" >
+					<div class="panel-heading">
+							<div class="panel-title">Settings</div>
+					</div>
+					<div style="padding-top:30px" class="panel-body" >
+						 <button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
+						 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
+						 {% if started == "0" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
+						 <button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
+					</div>
+				</div>
 				 <div class="panel panel-info" >
 					 <div class="panel-heading">
 							 <div class="panel-title">Candidates</div>
@@ -160,17 +171,6 @@
                  {% endfor %}
                </tbody>
              </table>
-					 </div>
-		     </div>
-				 <div class="panel panel-info" >
-					 <div class="panel-heading">
-							 <div class="panel-title">Settings</div>
-					 </div>
-					 <div style="padding-top:30px" class="panel-body" >
-						 	<button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
-							<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
-							{% if started == "0" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
-							<button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
 					 </div>
 		     </div>
  </div>
