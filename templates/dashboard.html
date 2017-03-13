@@ -34,7 +34,7 @@
 							 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
 							{% endif %}
 							 {% if started == "0" %}<button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/finalize/';" {% if started == "2" %} disabled> Election finalized{% else %}>Finalize Election{% endif %}</button>{% endif %}
-							 {% if started == "0" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
+							 {% if started == "0" or started == "2" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
 							 <button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
 						</div>
 					</div>
