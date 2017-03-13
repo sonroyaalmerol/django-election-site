@@ -39,7 +39,7 @@ def generate(request):
         user = User.objects.create_user(username, email, password)
         user.save()
 
-    send_mail('Voter Account Credentials', 'Here are your credentials for voting<br>Please be reminded that you can only vote once using this account.<br><br>Username: %s<br>Password: %s<br><br>Use these credentials to login! Thank you!<br>' % (username, password), EMAIL_FROM, emails, fail_silently=False)
+    send_mail('Voter Account Credentials', 'Here are your credentials for voting<br>Please be reminded that you can only vote once using this account.<br><br>Username: %s<br>Password: %s<br><br>Use these credentials to login! Thank you!<br>' % (username, password), "Election Bot <%s>" % (EMAIL_FROM), emails)
 
     messages.success(request, 'Successfully added voters!')
     # Get email addresses then hash them to username and password then send to email
