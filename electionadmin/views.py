@@ -110,5 +110,6 @@ def electionstop(request):
 @login_required
 def electionreset(request):
     candidates = Candidate.objects.all().update(votes=0)
+    voters = User.objects.all().update(is_active=True)
     messages.success(request, 'Successfully reset election!')
     return redirect("/admin/")
