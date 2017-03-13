@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
 from django.contrib import messages
 from .models import Candidate
+from django.core.exceptions import ObjectDoesNotExist
 from electionadmin.models import Setting
 
 # Create your views here.
@@ -16,7 +17,11 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active or user.is_staff:
-                    started = Setting.objects.get(name="started")
+                    try:
+                        started = Setting.objects.get(name="started")
+                    except ObjectDoesNotExist:
+                        started = Setting(name="started", value="0")
+                        started.save()
                     if int(started.value) == 1 or user.is_staff:
                         auth_login(request, user)
                         messages.success(request, 'Successfully logged in!')

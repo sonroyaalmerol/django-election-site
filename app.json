@@ -14,6 +14,6 @@
     "sendgrid:starter",
   ],
   "scripts": {
-    "postdeploy": "python manage.py migrate --noinput; python init.py"
+    "postdeploy": "python manage.py migrate --noinput"
   }
 }
