@@ -33,7 +33,16 @@ def login(request):
                         messages.error(request, 'The application is currently not accepting any votes.')
                         return redirect("/")
                 else:
-                    messages.error(request, 'You have already voted!')
+                    try:
+                        started = Setting.objects.get(name="started")
+                    except ObjectDoesNotExist:
+                        started = Setting(name="started", value="0")
+                        started.save()
+                    if int(started.value) == 1:
+                        messages.error(request, 'You have already casted your vote. Kindly wait for the election to end to see the results.')
+                    else:
+                        auth_login(request, user)
+                        messages.success(request, 'Successfully logged in!')
                     return redirect("/")
             else:
                 messages.error(request, 'This account does not exist.')
@@ -56,8 +65,11 @@ def list(request):
     if request.user.is_staff and not request.user.is_active:
         return redirect("/admin/")
     else:
-        candidates = Candidate.objects.all()
-        return render(request, "vote.html", {'candidates':candidates})
+        if request.user.is_active:
+            candidates = Candidate.objects.all()
+        else:
+            candidates = Candidate.objects.all().order_by('-votes')
+        return render(request, "vote.html", {'candidates':candidates, 'user':request.user})
 
 @login_required
 def submit(request):
