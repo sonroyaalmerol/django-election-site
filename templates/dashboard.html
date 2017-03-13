@@ -22,157 +22,163 @@
 			 {% for message in messages %}
 						<div class="alert alert-{{ message.tags }}">{{ message }}</div>
 				{% endfor %}
-				<div class="panel panel-info" >
-					<div class="panel-heading">
-							<div class="panel-title">Settings</div>
+				<div class="row">
+					<div class="col-md-4">
+					<div class="panel panel-info" >
+						<div class="panel-heading">
+								<div class="panel-title">Settings</div>
+						</div>
+						<div style="padding-top:30px" class="panel-body" >
+							 <button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
+							 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
+							 {% if started == "0" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
+							 <button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
+						</div>
 					</div>
-					<div style="padding-top:30px" class="panel-body" >
-						 <button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
-						 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
-						 {% if started == "0" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
-						 <button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
+					<div class="panel panel-info" >
+						<div class="panel-heading">
+								<div class="panel-title">Voters</div>
+						</div>
+						<div style="padding-top:30px" class="panel-body" >
+							<!-- Trigger the modal with a button -->
+							 {% if started == "0" %}<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#addvoter">Add voter/s</button>
+							 <br>{% endif %}
+							 <!-- Modal -->
+							 <div id="addvoter" class="modal fade" role="dialog">
+								 <div class="modal-dialog">
+
+									 <!-- Modal content-->
+									 <div class="modal-content">
+										 <div class="modal-header">
+											 <button type="button" class="close" data-dismiss="modal">&times;</button>
+											 <h4 class="modal-title">Add voter/s</h4>
+										 </div>
+										 <form action="/admin/generate/" method="post">
+											 {% csrf_token %}
+										 <div class="modal-body">
+											 <div class="form-group">
+												 <label for="comment">Enter email of voter/s (different line for each voter):</label>
+												 <textarea class="form-control" name="emails" rows="5"></textarea>
+											 </div>
+										 </div>
+										 <div class="modal-footer">
+											 <input type="submit" class="btn btn-primary" value="Add voter/s">
+											 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										 </div>
+										 </form>
+									 </div>
+
+								 </div>
+							 </div>
+							<table class="table table-condensed table-striped">
+								<tbody>
+									{% for voter in voters %}
+									<tr>
+										<td><label>{{ voter.email }} | {{ voter.username }} | {{ voter.email|getpassword }}</label></td>
+										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';">Delete Voter</button></td>{% endif %}
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
-				 <div class="panel panel-info" >
-					 <div class="panel-heading">
-							 <div class="panel-title">Candidates</div>
-					 </div>
-					 <div style="padding-top:30px" class="panel-body" >
-						 <!-- Trigger the modal with a button -->
-							{% if started == "0" %}<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#addcandidate">Add candidate/s</button>
-							<br>{% endif %}
-							<!-- Modal -->
-							<div id="addcandidate" class="modal fade" role="dialog">
-							  <div class="modal-dialog">
+				<div class="col-md-8">
+					 <div class="panel panel-info" >
+						 <div class="panel-heading">
+								 <div class="panel-title">Candidates</div>
+						 </div>
+						 <div style="padding-top:30px" class="panel-body" >
+							 <!-- Trigger the modal with a button -->
+								{% if started == "0" %}<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#addcandidate">Add candidate/s</button>
+								<br>{% endif %}
+								<!-- Modal -->
+								<div id="addcandidate" class="modal fade" role="dialog">
+								  <div class="modal-dialog">
 
-							    <!-- Modal content-->
-							    <div class="modal-content">
-							      <div class="modal-header">
-							        <button type="button" class="close" data-dismiss="modal">&times;</button>
-							        <h4 class="modal-title">Add candidate</h4>
-							      </div>
-										<form action="/admin/candidate/add/" method="post">
-											{% csrf_token %}
-							      <div class="modal-body">
-											<div class="form-group">
-											  <label>Name:</label>
-											  <input type="text" class="form-control" name="name"></input>
-											</div>
-											<div class="form-group">
-											  <label>Nickname:</label>
-											  <input type="text" class="form-control" name="nickname"></input>
-											</div>
-											<div class="form-group">
-											  <label>Description</label>
-											  <textarea class="form-control" name="description" rows="5"></textarea>
-											</div>
-							      </div>
-							      <div class="modal-footer">
-											<input type="submit" class="btn btn-primary" value="Add candidate">
-							        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							      </div>
-										</form>
-							    </div>
+								    <!-- Modal content-->
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								        <h4 class="modal-title">Add candidate</h4>
+								      </div>
+											<form action="/admin/candidate/add/" method="post">
+												{% csrf_token %}
+								      <div class="modal-body">
+												<div class="form-group">
+												  <label>Name:</label>
+												  <input type="text" class="form-control" name="name"></input>
+												</div>
+												<div class="form-group">
+												  <label>Nickname:</label>
+												  <input type="text" class="form-control" name="nickname"></input>
+												</div>
+												<div class="form-group">
+												  <label>Description</label>
+												  <textarea class="form-control" name="description" rows="5"></textarea>
+												</div>
+								      </div>
+								      <div class="modal-footer">
+												<input type="submit" class="btn btn-primary" value="Add candidate">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								      </div>
+											</form>
+								    </div>
 
-							  </div>
-							</div>
-             <table class="table table-condensed table-striped">
-               <tbody>
-                 {% for candidate in candidates %}
-                 <tr>
-                   <td><label>{{ candidate.name }} ({{ candidate.nickname }}) | {{ candidate.votes }} votes</label><br><i>{{ candidate.description }}</i></td>
-									 {% if started == "0" %}<td><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#editcandidate">Edit candidate</button></td>{% endif %}
-									 <!-- Trigger the modal with a button -->
-									 <!-- Modal -->
-									 <div id="editcandidate" class="modal fade" role="dialog">
-										 <div class="modal-dialog">
+								  </div>
+								</div>
+	             <table class="table table-condensed table-striped">
+	               <tbody>
+	                 {% for candidate in candidates %}
+	                 <tr>
+	                   <td><label>{{ candidate.name }} ({{ candidate.nickname }}) | {{ candidate.votes }} votes</label><br><i>{{ candidate.description }}</i></td>
+										 {% if started == "0" %}<td><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#editcandidate">Edit candidate</button></td>{% endif %}
+										 <!-- Trigger the modal with a button -->
+										 <!-- Modal -->
+										 <div id="editcandidate" class="modal fade" role="dialog">
+											 <div class="modal-dialog">
 
-											 <!-- Modal content-->
-											 <div class="modal-content">
-												 <div class="modal-header">
-													 <button type="button" class="close" data-dismiss="modal">&times;</button>
-													 <h4 class="modal-title">Edit candidate</h4>
-												 </div>
-												 <form action="/admin/candidate/edit/" method="post">
-													 <input type="hidden" name="pk" value="{{ candidate.pk }}"></input>
-													 {% csrf_token %}
-												 <div class="modal-body">
-													 <div class="form-group">
-														 <label>Name:</label>
-														 <input type="text" class="form-control" name="name" value="{{ candidate.name }}"></input>
+												 <!-- Modal content-->
+												 <div class="modal-content">
+													 <div class="modal-header">
+														 <button type="button" class="close" data-dismiss="modal">&times;</button>
+														 <h4 class="modal-title">Edit candidate</h4>
 													 </div>
-													 <div class="form-group">
-														 <label>Nickname:</label>
-														 <input type="text" class="form-control" name="nickname" value="{{ candidate.nickname }}"></input>
+													 <form action="/admin/candidate/edit/" method="post">
+														 <input type="hidden" name="pk" value="{{ candidate.pk }}"></input>
+														 {% csrf_token %}
+													 <div class="modal-body">
+														 <div class="form-group">
+															 <label>Name:</label>
+															 <input type="text" class="form-control" name="name" value="{{ candidate.name }}"></input>
+														 </div>
+														 <div class="form-group">
+															 <label>Nickname:</label>
+															 <input type="text" class="form-control" name="nickname" value="{{ candidate.nickname }}"></input>
+														 </div>
+														 <div class="form-group">
+															 <label>Description</label>
+															 <textarea class="form-control" name="description" rows="5">{{ candidate.description }}</textarea>
+														 </div>
 													 </div>
-													 <div class="form-group">
-														 <label>Description</label>
-														 <textarea class="form-control" name="description" rows="5">{{ candidate.description }}</textarea>
+													 <div class="modal-footer">
+														 <input type="submit" class="btn btn-primary" value="Update candidate">
+														 <button type="button" class="btn btn-danger" onclick="location.href='/admin/candidate/delete/{{ candidate.pk }}/';">Delete candidate</button>
+														 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 													 </div>
+													 </form>
 												 </div>
-												 <div class="modal-footer">
-													 <input type="submit" class="btn btn-primary" value="Update candidate">
-													 <button type="button" class="btn btn-danger" onclick="location.href='/admin/candidate/delete/{{ candidate.pk }}/';">Delete candidate</button>
-													 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-												 </div>
-												 </form>
+
 											 </div>
-
 										 </div>
-									 </div>
-                 </tr>
-                 {% endfor %}
-               </tbody>
-             </table>
-					 </div>
-		     </div>
-				 <div class="panel panel-info" >
-					 <div class="panel-heading">
-							 <div class="panel-title">Voters</div>
-					 </div>
-					 <div style="padding-top:30px" class="panel-body" >
-						 <!-- Trigger the modal with a button -->
-							{% if started == "0" %}<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#addvoter">Add voter/s</button>
-							<br>{% endif %}
-							<!-- Modal -->
-							<div id="addvoter" class="modal fade" role="dialog">
-							  <div class="modal-dialog">
-
-							    <!-- Modal content-->
-							    <div class="modal-content">
-							      <div class="modal-header">
-							        <button type="button" class="close" data-dismiss="modal">&times;</button>
-							        <h4 class="modal-title">Add voter/s</h4>
-							      </div>
-										<form action="/admin/generate/" method="post">
-											{% csrf_token %}
-							      <div class="modal-body">
-											<div class="form-group">
-											  <label for="comment">Enter email of voter/s (different line for each voter):</label>
-											  <textarea class="form-control" name="emails" rows="5"></textarea>
-											</div>
-							      </div>
-							      <div class="modal-footer">
-											<input type="submit" class="btn btn-primary" value="Add voter/s">
-							        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							      </div>
-										</form>
-							    </div>
-
-							  </div>
-							</div>
-             <table class="table table-condensed table-striped">
-               <tbody>
-                 {% for voter in voters %}
-                 <tr>
-                   <td><label>{{ voter.email }} | {{ voter.username }} | {{ voter.email|getpassword }}</label></td>
-									 {% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';">Delete Voter</button></td>{% endif %}
-                 </tr>
-                 {% endfor %}
-               </tbody>
-             </table>
-					 </div>
-		     </div>
+	                 </tr>
+	                 {% endfor %}
+	               </tbody>
+	             </table>
+						 </div>
+			     </div>
+				 </div>
+			 </div>
  </div>
 </body>
 
