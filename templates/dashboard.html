@@ -12,6 +12,7 @@
 	<title>Dashboard</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
 	<script src="https://cdn.rawgit.com/rmariuzzo/checkboxes.js/4a4b8f1d/dist/jquery.checkboxes-1.2.0.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
@@ -78,7 +79,7 @@
 									{% for voter in voters %}
 									<tr>
 										<td><label>{{ voter.email }}</label></td>
-										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';">Delete Voter</button></td>{% endif %}
+										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';"><i class="fa fa-trash" aria-hidden="true"></i></button></td>{% endif %}
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -135,7 +136,7 @@
 	                 {% for candidate in candidates %}
 	                 <tr>
 	                   <td><label>{{ candidate.name }} ({{ candidate.nickname }}) | {{ candidate.votes }} votes</label><br><i>{{ candidate.description }}</i></td>
-										 {% if started == "0" %}<td><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#editcandidate">Edit candidate</button></td>{% endif %}
+										 {% if started == "0" %}<td><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#editcandidate"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>{% endif %}
 										 <!-- Trigger the modal with a button -->
 										 <!-- Modal -->
 										 <div id="editcandidate" class="modal fade" role="dialog">
