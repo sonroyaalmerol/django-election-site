@@ -48,7 +48,13 @@ def login(request):
                 messages.error(request, 'This account does not exist.')
                 return redirect("vote:login")
         else:
-            return render(request, "login.html", {})
+            username = ''
+            password = ''
+            if request.method == 'GET' and 'u' in request.GET:
+                username = request.GET['u']
+            if request.method == 'GET' and 'p' in request.GET:
+                password = request.GET['p']
+            return render(request, "login.html", {'username':username, 'password':password})
     else:
         if request.user.is_staff:
             return redirect("/admin/")
