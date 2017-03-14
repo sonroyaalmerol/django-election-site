@@ -45,6 +45,7 @@ def generate(request):
             {
                 'username': username,
                 'password': password,
+                'current_domain': request.get_host(),
             }
         )
     send_mail('Voter Account Credentials', '', "Election Bot <%s>" % (EMAIL_FROM), emails, html_message=html_message)
