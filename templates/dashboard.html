@@ -11,11 +11,24 @@
 
 	<title>Dashboard</title>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/assets/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
 	<script src="https://cdn.rawgit.com/rmariuzzo/checkboxes.js/4a4b8f1d/dist/jquery.checkboxes-1.2.0.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	function printDiv(divName) {
+	     var printContents = document.getElementById(divName).innerHTML;
+	     var originalContents = document.body.innerHTML;
+
+	     document.body.innerHTML = printContents;
+
+	     window.print();
+
+	     document.body.innerHTML = originalContents;
+	}
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -34,8 +47,32 @@
 							 <button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
 							 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
 							{% endif %}
-							 {% if started == "0" %}<button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/finalize/';" {% if started == "2" %} disabled> Election finalized{% else %}>Finalize Election{% endif %}</button>{% endif %}
-							 {% if started == "0" or started == "2" %}<button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/reset/';">Reset Election</button>{% endif %}
+							 {% if started == "0" %}<button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/finalize/';" {% if started == "2" %} disabled> Results Tallied{% else %}>Tally Results{% endif %}</button>{% endif %}
+							 {% if started == "2" %}
+							 <button type="button" class="btn btn-primary btn-block" onclick="printDiv('printableArea')">Print results</button>
+							 <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#resetmodal">Reset Election</button>
+							 <!-- Modal -->
+							 <div id="resetmodal" class="modal fade" role="dialog">
+								 <div class="modal-dialog">
+
+									 <!-- Modal content-->
+									 <div class="modal-content">
+										 <div class="modal-header">
+											 <button type="button" class="close" data-dismiss="modal">&times;</button>
+											 <h4 class="modal-title">Confirmation</h4>
+										 </div>
+										 <div class="modal-body">
+											 Are you sure you want to reset the elections?
+										 </div>
+										 <div class="modal-footer">
+											 <button type="button" class="btn btn-primary" onclick="location.href='/admin/election/reset/';">Yes</button>
+											 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+										 </div>
+									 </div>
+
+								 </div>
+							 </div>
+							 {% endif %}
 							 <button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
 						</div>
 					</div>
@@ -61,7 +98,7 @@
 											 {% csrf_token %}
 										 <div class="modal-body">
 											 <div class="form-group">
-												 <label for="comment">Enter email of voter/s (different line for each voter):</label>
+												 <label for="comment">Enter email/mobile number of voter/s (different line for each voter):</label>
 												 <textarea class="form-control" name="emails" rows="5"></textarea>
 											 </div>
 										 </div>
@@ -78,6 +115,9 @@
 								<tbody>
 									{% for voter in voters %}
 									<tr>
+										{% if not voter.is_active %}
+										<td><i class="fa fa-check" aria-hidden="true"></i></td>
+										{% endif %}
 										<td><label>{{ voter.email }}</label></td>
 										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';"><i class="fa fa-trash" aria-hidden="true"></i></button></td>{% endif %}
 									</tr>
@@ -131,6 +171,7 @@
 
 								  </div>
 								</div>
+								<div id="printableArea">
 	             <table class="table table-condensed table-striped">
 	               <tbody>
 	                 {% for candidate in candidates %}
@@ -179,6 +220,7 @@
 	                 {% endfor %}
 	               </tbody>
 	             </table>
+						 </div>
 						 </div>
 			     </div>
 				 </div>

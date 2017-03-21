@@ -84,7 +84,7 @@ def submit(request):
         count = 0
         for i, val in enumerate(votes):
             count = count + 1
-        if count == 7:
+        if count <= 7:
             for i, val in enumerate(votes):
                 candidate = Candidate.objects.get(pk=int(val))
                 candidate.votes = candidate.votes+1
@@ -94,7 +94,7 @@ def submit(request):
             messages.success(request, 'Vote submitted! Thank you for voting!')
             return redirect("/logout/")
         else:
-            messages.error(request, 'Please vote for exactly 7 candidates!')
+            messages.error(request, 'Please vote for at most 7 candidates!')
             return redirect("/")
     else:
         return redirect("/")
