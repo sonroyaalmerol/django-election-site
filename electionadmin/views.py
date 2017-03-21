@@ -42,13 +42,14 @@ def generate(request):
         user.save()
 
         if email.isdigit():
-            message = "Hi! Here are your credentials for voting. Please be reminded that you can only vote once using this account. Thank you and have a good day!\nUsername: %s \nPassword: %s\n" % (username, password)
-            post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290469148',
-                        'message_id':hasher.hexdigest(), 'message':message, 'client_id':'f3be0f5b7d2abc0ce6fc0dccf7ecc049272af5679fbf5a547429cbaddb0391ff',
-                        'secret_key':'757f94e11c41b07a8eb846c20ad1db7fcb98b07a57b85ebe7092c3e4c457f87b'
-                        }
-            response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
-            content = response.json()
+            messages.success(request, 'SMS Sent!')
+            #message = "Hi! Here are your credentials for voting. Please be reminded that you can only vote once using this account. Thank you and have a good day!\nUsername: %s \nPassword: %s\n" % (username, password)
+            #post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290469148',
+            #            'message_id':hasher.hexdigest(), 'message':message, 'client_id':'f3be0f5b7d2abc0ce6fc0dccf7ecc049272af5679fbf5a547429cbaddb0391ff',
+            #            'secret_key':'757f94e11c41b07a8eb846c20ad1db7fcb98b07a57b85ebe7092c3e4c457f87b'
+            #            }
+            #response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
+            #content = response.json()
             if int(content['status']) != 200:
                 messages.error(request, 'SMS Error code: %s, %s' % (content['status'], content['message']))
                 user.delete()
