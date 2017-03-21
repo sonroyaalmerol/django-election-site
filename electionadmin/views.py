@@ -50,9 +50,9 @@ def generate(request):
             #            }
             #response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
             #content = response.json()
-            if int(content['status']) != 200:
-                messages.error(request, 'SMS Error code: %s, %s' % (content['status'], content['message']))
-                user.delete()
+            #if int(content['status']) != 200:
+            #    messages.error(request, 'SMS Error code: %s, %s' % (content['status'], content['message']))
+            #    user.delete()
         else:
             html_message = loader.render_to_string(
                     'email.html',
