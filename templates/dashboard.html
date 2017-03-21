@@ -129,10 +129,7 @@
 				 								<tbody>
 				 									{% for voter in voters %}
 				 									<tr>
-				 										{% if not voter.is_active %}
-				 										<td><i class="fa fa-check" aria-hidden="true"></i></td>
-				 										{% endif %}
-				 										<td><label>{{ voter.email }}</label></td>
+				 										<td>{% if not voter.is_active %}<i class="fa fa-check" aria-hidden="true"></i>&nbsp;{% endif %}<label>{{ voter.email }}</label></td>
 				 										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';"><i class="fa fa-trash" aria-hidden="true"></i></button></td>{% endif %}
 				 									</tr>
 				 									{% endfor %}
