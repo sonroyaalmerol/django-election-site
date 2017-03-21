@@ -9,6 +9,9 @@ from electionadmin.models import Setting
 
 # Create your views here.
 
+def redirect(request):
+    return redirect("/login/")
+
 def login(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
@@ -28,10 +31,10 @@ def login(request):
                         if user.is_staff:
                             return redirect("/admin/")
                         else:
-                            return redirect("/")
+                            return redirect("/dashboard/")
                     else:
                         messages.error(request, 'The application is currently not accepting any votes.')
-                        return redirect("/")
+                        return redirect("/login/")
                 else:
                     try:
                         started = Setting.objects.get(name="started")
@@ -43,7 +46,7 @@ def login(request):
                         messages.success(request, 'Successfully logged in!')
                     else:
                         messages.error(request, 'You have already casted your vote. Kindly wait for the election to end to see the results.')
-                    return redirect("/")
+                    return redirect("/login/")
             else:
                 messages.error(request, 'This account does not exist.')
                 return redirect("vote:login")
@@ -59,12 +62,12 @@ def login(request):
         if request.user.is_staff:
             return redirect("/admin/")
         else:
-            return redirect("/")
+            return redirect("/dashboard/")
 
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect("/")
+    return redirect("/login/")
 
 @login_required
 def list(request):
@@ -95,6 +98,6 @@ def submit(request):
             return redirect("/logout/")
         else:
             messages.error(request, 'Please vote for exactly 7 candidates!')
-            return redirect("/")
+            return redirect("/dashboard/")
     else:
-        return redirect("/")
+        return redirect("/login/")
