@@ -46,6 +46,7 @@
 							{% if started != "2" %}
 							 <button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
 							 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
+							 <hr>
 							{% endif %}
 							 {% if started == "0" %}<button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/finalize/';" {% if started == "2" %} disabled> Results Tallied{% else %}>Tally Results{% endif %}</button>{% endif %}
 							 {% if started == "2" %}
@@ -73,6 +74,7 @@
 								 </div>
 							 </div>
 							 {% endif %}
+							 <hr>
 							 <button type="button" class="btn btn-info btn-block" onclick="location.href='/logout/';">Logout</button>
 						</div>
 					</div>
