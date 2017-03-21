@@ -3,3 +3,4 @@ psycopg2==2.7
 whitenoise
 waitress
 dj-database-url
+requests

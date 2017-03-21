@@ -12,6 +12,7 @@ from electionsite.settings import SECRET_KEY, EMAIL_FROM
 from django.core.mail import send_mail
 from .models import Setting
 import hashlib
+import requests
 from django.template import loader
 
 # Create your views here.
@@ -40,15 +41,26 @@ def generate(request):
         user = User.objects.create_user(username, email, password)
         user.save()
 
-    html_message = loader.render_to_string(
-            'email.html',
-            {
-                'username': username,
-                'password': password,
-                'current_domain': request.get_host(),
-            }
-        )
-    send_mail('Voter Account Credentials', '', "Election Bot <%s>" % (EMAIL_FROM), emails, html_message=html_message)
+        if email.isdigit():
+            message = "Hi! Here are your credentials for voting. Please be reminded that you can only vote once using this account. Thank you! Have a good day! Username: %s | Password: %s " % (username, password)
+            post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290469148',
+                        'message_id':hasher, 'message':message, 'client_id':'f3be0f5b7d2abc0ce6fc0dccf7ecc049272af5679fbf5a547429cbaddb0391ff',
+                        'secret_key':'757f94e11c41b07a8eb846c20ad1db7fcb98b07a57b85ebe7092c3e4c457f87b'
+                        }
+            response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
+            content = response.json()
+            if content['status'] != "200":
+                messages.error(request, 'Error code: %s, %s' % (content['status'], content['message']))
+        else:
+            html_message = loader.render_to_string(
+                    'email.html',
+                    {
+                        'username': username,
+                        'password': password,
+                        'current_domain': request.get_host(),
+                    }
+                )
+            send_mail('Voter Account Credentials', '', "Election Bot <%s>" % (EMAIL_FROM), [email], html_message=html_message)
 
     messages.success(request, 'Successfully added voters!')
     # Get email addresses then hash them to username and password then send to email
