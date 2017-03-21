@@ -9,9 +9,6 @@ from electionadmin.models import Setting
 
 # Create your views here.
 
-def redirect(request):
-    return redirect("/login/")
-
 def login(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
