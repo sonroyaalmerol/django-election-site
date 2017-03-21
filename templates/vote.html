@@ -19,7 +19,7 @@
 <body>
 	<div class="container">
 		 <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			 <div class="alert alert-info">You are allowed to vote at most 7 candidates.</div>
+			 {% if user.is_active %}<div class="alert alert-info">You are allowed to vote at most 7 candidates.</div>{% endif %}
 			 {% for message in messages %}
 						<div class="alert alert-{{ message.tags }}">{{ message }}</div>
 				{% endfor %}
@@ -64,7 +64,7 @@
 											 <!-- Button -->
 
 											 <div class="col-sm-12 controls">
-												 <button type="button" class="btn btn-success btn-block" onclick="location.href='/logout/';">Logout</button>
+												 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/logout/';">Logout</button>
 											 </div>
 									 </div>
 									 {% endif %}
