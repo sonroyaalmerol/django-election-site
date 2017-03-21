@@ -46,7 +46,6 @@
 							{% if started != "2" %}
 							 <button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/start/';" {% if started == "1" %} disabled> Election running!{% else %}>Start Elections{% endif %}</button>
 							 <button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/election/stop/';" {% if started == "0" %} disabled> Election not running!{% else %}>Stop Elections{% endif %}</button>
-							 <hr>
 							{% endif %}
 							 {% if started == "0" %}<button type="button" class="btn btn-success btn-block" onclick="location.href='/admin/election/finalize/';" {% if started == "2" %} disabled> Results Tallied{% else %}>Tally Results{% endif %}</button>{% endif %}
 							 {% if started == "2" %}
@@ -85,7 +84,7 @@
 						<div style="padding-top:30px" class="panel-body" >
 							<!-- Trigger the modal with a button -->
 							 {% if started == "0" %}<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#addvoter">Add voter/s</button>
-							 <br>{% endif %}
+							 <br>
 							 <!-- Modal -->
 							 <div id="addvoter" class="modal fade" role="dialog">
 								 <div class="modal-dialog">
@@ -113,19 +112,39 @@
 
 								 </div>
 							 </div>
-							<table class="table table-condensed table-striped">
-								<tbody>
-									{% for voter in voters %}
-									<tr>
-										{% if not voter.is_active %}
-										<td><i class="fa fa-check" aria-hidden="true"></i></td>
-										{% endif %}
-										<td><label>{{ voter.email }}</label></td>
-										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';"><i class="fa fa-trash" aria-hidden="true"></i></button></td>{% endif %}
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
+							 {% endif %}
+							 <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#viewvoters">View voters</button>
+							 <br>
+							 <!-- Modal -->
+							 <div id="viewvoters" class="modal fade" role="dialog">
+								 <div class="modal-dialog">
+									 <!-- Modal content-->
+									 <div class="modal-content">
+										 <div class="modal-header">
+											 <button type="button" class="close" data-dismiss="modal">&times;</button>
+											 <h4 class="modal-title">Voters</h4>
+										 </div>
+										 <div class="modal-body">
+											 <table class="table table-condensed table-striped">
+				 								<tbody>
+				 									{% for voter in voters %}
+				 									<tr>
+				 										{% if not voter.is_active %}
+				 										<td><i class="fa fa-check" aria-hidden="true"></i></td>
+				 										{% endif %}
+				 										<td><label>{{ voter.email }}</label></td>
+				 										{% if started == "0" %}<td><button type="button" class="btn btn-danger btn-block" onclick="location.href='/admin/voter/delete/{{ voter.pk }}/';"><i class="fa fa-trash" aria-hidden="true"></i></button></td>{% endif %}
+				 									</tr>
+				 									{% endfor %}
+				 								</tbody>
+				 							</table>
+										 </div>
+										 <div class="modal-footer">
+											 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										 </div>
+									 </div>
+								 </div>
+							 </div>
 						</div>
 					</div>
 				</div>
