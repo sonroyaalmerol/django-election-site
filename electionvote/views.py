@@ -28,10 +28,10 @@ def login(request):
                         if user.is_staff:
                             return redirect("/admin/")
                         else:
-                            return redirect("/dashboard/")
+                            return redirect("/")
                     else:
                         messages.error(request, 'The application is currently not accepting any votes.')
-                        return redirect("/login/")
+                        return redirect("/")
                 else:
                     try:
                         started = Setting.objects.get(name="started")
@@ -43,7 +43,7 @@ def login(request):
                         messages.success(request, 'Successfully logged in!')
                     else:
                         messages.error(request, 'You have already casted your vote. Kindly wait for the election to end to see the results.')
-                    return redirect("/login/")
+                    return redirect("/")
             else:
                 messages.error(request, 'This account does not exist.')
                 return redirect("vote:login")
@@ -59,12 +59,12 @@ def login(request):
         if request.user.is_staff:
             return redirect("/admin/")
         else:
-            return redirect("/dashboard/")
+            return redirect("/")
 
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect("/login/")
+    return redirect("/")
 
 @login_required
 def list(request):
@@ -95,6 +95,6 @@ def submit(request):
             return redirect("/logout/")
         else:
             messages.error(request, 'Please vote for exactly 7 candidates!')
-            return redirect("/dashboard/")
+            return redirect("/")
     else:
-        return redirect("/login/")
+        return redirect("/")
