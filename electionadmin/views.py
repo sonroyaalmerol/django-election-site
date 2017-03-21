@@ -43,9 +43,9 @@ def generate(request):
 
         if email.isdigit():
             message = "Hi! Here are your credentials for voting. Please be reminded that you can only vote once using this account. Thank you! Have a good day! Username: %s | Password: %s " % (username, password)
-            post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290469148',
-                        'message_id':hasher, 'message':message, 'client_id':'f3be0f5b7d2abc0ce6fc0dccf7ecc049272af5679fbf5a547429cbaddb0391ff',
-                        'secret_key':'757f94e11c41b07a8eb846c20ad1db7fcb98b07a57b85ebe7092c3e4c457f87b'
+            post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290681469',
+                        'message_id':hasher, 'message':message, 'client_id':'278809c614190bd94aec5b72318c7b6ec0a042d2da97c3f9e8dd068d063f2768',
+                        'secret_key':'eac83e9fd04749b7c4090ace834d62082d03f14cf0e55c96f28f50f4975097a6'
                         }
             response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
             content = response.json()
