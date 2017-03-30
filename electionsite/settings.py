@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -78,14 +78,14 @@ WSGI_APPLICATION = 'electionsite.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    #'default': {
+    # 'default': {
     #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
     #    'NAME': 'electionsite',
     #    'USER': 'electionsiteuser',
-    #    'PASSWORD': 'zj9$j*_9v$7ikn3d_unin$3c7+#omqso&%kwc1)qe=+qf1zrct',
+    #    'PASSWORD': 'electionsiteuser',
     #    'HOST': 'localhost',
     #    'PORT': '',
-    #}
+    # }
 }
 
 DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
