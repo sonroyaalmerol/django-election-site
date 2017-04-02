@@ -243,7 +243,7 @@
 														 <button type="button" class="close" data-dismiss="modal">&times;</button>
 														 <h4 class="modal-title">Edit candidate</h4>
 													 </div>
-													 <form action="/admin/candidate/edit/" method="post">
+													 <form action="/admin/candidate/edit/" method="post" enctype="multipart/form-data">
 														 <input type="hidden" name="pk" value="{{ candidate.pk }}"></input>
 														 {% csrf_token %}
 													 <div class="modal-body">
