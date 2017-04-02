@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import F
+from django.db import IntegrityError
 import datetime
 from random import randint
 from django.contrib import messages
@@ -23,8 +24,15 @@ from django.core.files.storage import FileSystemStorage
 def dashboard(request):
     candidates = Candidate.objects.all().order_by('-votes')
     voters = User.objects.filter(is_staff=False)
+    voted = User.objects.filter(is_active=False)
+    voterscount = voters.count()
+    votedcount = voted.count()
+    if voterscount > 0:
+        turnout = votedcount * 100.00 / voterscount
+    else:
+        turnout = 0.0
     started = Setting.objects.get(name="started").value
-    return render(request, "dashboard.html", {'candidates':candidates, 'voters':voters, 'started':started})
+    return render(request, "dashboard.html", {'candidates':candidates, 'voters':voters, 'started':started, 'voterscount':voterscount, 'votedcount':votedcount, 'turnout':turnout})
 
 @staff_member_required(login_url='/login/')
 @login_required
@@ -39,33 +47,39 @@ def generate(request):
         username = hasher.hexdigest()[:8]
         password = hasher.hexdigest()[-8:]
 
-        user = User.objects.create_user(username, email, password)
-        user.save()
-
-        if email.isdigit():
-            #messages.success(request, 'SMS Sent!')
-            message = "Hi! Here are your credentials for voting. Please be reminded that you can only vote once using this account. Thank you and have a good day!\nUsername: %s \nPassword: %s\n" % (username, password)
-            post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290469148',
-                        'message_id':hasher.hexdigest(), 'message':message, 'client_id':'f3be0f5b7d2abc0ce6fc0dccf7ecc049272af5679fbf5a547429cbaddb0391ff',
-                        'secret_key':'757f94e11c41b07a8eb846c20ad1db7fcb98b07a57b85ebe7092c3e4c457f87b'
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+            if email.isdigit():
+                #messages.success(request, 'SMS Sent!')
+                message = "Hi MAG Member! Here are your credentials for MAG Elections 2017. You can vote at http://%s only once using this account. Thank you and have a good day! - MAG Comelec \nUsername: %s \nPassword: %s\n" % (request.get_host(), username, password)
+                post_data = {'message_type':'SEND', 'mobile_number':"63%s" % (email), 'shortcode': '29290469148',
+                            'message_id':hasher.hexdigest(), 'message':message, 'client_id':'f3be0f5b7d2abc0ce6fc0dccf7ecc049272af5679fbf5a547429cbaddb0391ff',
+                            'secret_key':'757f94e11c41b07a8eb846c20ad1db7fcb98b07a57b85ebe7092c3e4c457f87b'
+                            }
+                response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
+                content = response.json()
+                if int(content['status']) != 200:
+                    messages.error(request, 'SMS (%s) Error code: %s, %s. Please try again.' % (email, content['status'], content['message']))
+                    user.delete()
+            else:
+                html_message = loader.render_to_string(
+                        'email.html',
+                        {
+                            'username': username,
+                            'password': password,
+                            'current_domain': request.get_host(),
                         }
-            response = requests.post('https://post.chikka.com/smsapi/request', data=post_data)
-            content = response.json()
-            if int(content['status']) != 200:
-                messages.error(request, 'SMS (%s) Error code: %s, %s' % (email, content['status'], content['message']))
-                user.delete()
-        else:
-            html_message = loader.render_to_string(
-                    'email.html',
-                    {
-                        'username': username,
-                        'password': password,
-                        'current_domain': request.get_host(),
-                    }
-                )
-            send_mail('Voter Account Credentials', '', "Election Bot <%s>" % (EMAIL_FROM), [email], html_message=html_message)
+                    )
+                status = send_mail('Voter Account Credentials', '', 'MAG Comelec <2017>', [email], html_message=html_message)
+                # Need to detect if a sent email was bounced / not sent
+                if status == 0:
+                    messages.error(request, 'Sending email to %s resulted to an error. Please try again.' % (email))
+                    user.delete()
+        except IntegrityError as e:
+            messages.error(request, '%s is already a voter and not given credentials! If you still want to generate new credentials for it, remove it from the list and add it again.' % (email))
 
-    messages.success(request, 'Successfully added voters!')
+    messages.success(request, 'Successfully added voters.')
     # Get email addresses then hash them to username and password then send to email
     return redirect("/admin/")
 
