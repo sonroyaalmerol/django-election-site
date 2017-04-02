@@ -27,7 +27,7 @@
 
 <body>
 	<div class="container">
-		<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+		<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-8">
 			{% if user.is_active %}
 			<div class="alert alert-{{ message.tags }}">{{ message }}</div>
 			<div class="alert alert-info">Kindly click on the checkbox beside the name to vote for that particular candidate. You are allowed to vote at most 7 candidates.</div>{% endif %} {% for message in messages %}
@@ -48,6 +48,8 @@
 								<tr>
 									{% if candidate.photo %}
 									<td style="width:200px"><img src="{{ candidate.photo.url }}" class="photo"></td>
+									{% else %}
+									<td style="width:200px"></td>
 									{% endif %}
 									<td><label><input name="votes[]" type="checkbox" value="{{ candidate.pk }}"> {{ candidate.name }} ({{ candidate.nickname }})</label><br><i>{% autoescape off %}{{ candidate.description }}{% endautoescape %}</i></td>
 								</tr>
@@ -69,6 +71,8 @@
 							<tr>
 								{% if candidate.photo %}
 								<td style="width:200px"><img src="{{ candidate.photo.url }}" class="photo"></td>
+								{% else %}
+								<td style="width:200px"></td>
 								{% endif %}
 								<td><label>{{ candidate.name }} ({{ candidate.nickname }}) | {{ candidate.votes }} votes</label><br><i>{{ candidate.description }}</i></td>
 							</tr>
