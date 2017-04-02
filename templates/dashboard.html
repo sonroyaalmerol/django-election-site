@@ -29,6 +29,15 @@
 	     document.body.innerHTML = originalContents;
 	}
 	</script>
+	<style>
+		.photo {
+		  display: block;
+		  max-width:200px;
+		  max-height:200px;
+		  width: auto;
+		  height: auto;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -252,7 +261,7 @@
 														 </div>
 														 <div class="form-group">
 			 													<label>Candidate Photo</label>
-																<img src="{{ candidate.photo.url }}" width="300">
+																<img class="photo" src="{{ candidate.photo.url }}">
 			 													<input type="file" name="photo"></input>
 			 												</div>
 													 </div>
