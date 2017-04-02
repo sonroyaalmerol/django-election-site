@@ -96,7 +96,7 @@ def deletevoter(request, pk):
 def addcandidate(request):
     if request.method == 'POST':
         myfile = None
-        if request.FILES['photo']:
+        if 'photo' in request.FILES:
             myfile = request.FILES['photo']
         new = Candidate(name=request.POST['name'], nickname=request.POST['nickname'], description=request.POST['description'], photo=myfile)
         new.save()
@@ -111,7 +111,7 @@ def editcandidate(request):
         edit.name = request.POST['name']
         edit.nickname = request.POST['nickname']
         edit.description = request.POST['description']
-        if request.FILES['photo']:
+        if 'photo' in request.FILES:
             edit.photo = request.FILES['photo']
         edit.save()
         messages.success(request, 'Successfully updated candidate!')

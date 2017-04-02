@@ -9,7 +9,7 @@ class Candidate(models.Model):
     nickname = models.CharField(max_length=30)
     description = models.TextField()
     votes = models.IntegerField(default=0)
-    photo = models.FileField(upload_to='candidates/', null=True, blank=True)
+    photo = models.ImageField(upload_to='candidates/', null=True, blank=True)
 
     def __str__(self):              # __unicode__ on Python 2
         return self.name
