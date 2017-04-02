@@ -261,7 +261,9 @@
 														 </div>
 														 <div class="form-group">
 			 													<label>Candidate Photo</label>
+																{% if candidate.photo %}
 																<img class="photo" src="{{ candidate.photo.url }}">
+																{% endif %}
 			 													<input type="file" name="photo"></input>
 			 												</div>
 													 </div>

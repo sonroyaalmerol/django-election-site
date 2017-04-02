@@ -46,7 +46,9 @@
 							<tbody>
 								{% for candidate in candidates %}
 								<tr>
+									{% if candidate.photo %}
 									<td style="width:200px"><img src="{{ candidate.photo.url }}" class="photo"></td>
+									{% endif %}
 									<td><label><input name="votes[]" type="checkbox" value="{{ candidate.pk }}"> {{ candidate.name }} ({{ candidate.nickname }})</label><br><i>{% autoescape off %}{{ candidate.description }}{% endautoescape %}</i></td>
 								</tr>
 								{% endfor %}
@@ -65,7 +67,9 @@
 						<tbody>
 							{% for candidate in candidates %}
 							<tr>
+								{% if candidate.photo %}
 								<td style="width:200px"><img src="{{ candidate.photo.url }}" class="photo"></td>
+								{% endif %}
 								<td><label>{{ candidate.name }} ({{ candidate.nickname }}) | {{ candidate.votes }} votes</label><br><i>{{ candidate.description }}</i></td>
 							</tr>
 							{% endfor %}
