@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='candidate',
-            name='photourl',
-            field=models.CharField(default='', max_length=90),
+            name='photo',
+            field=models.FileField(upload_to='candidates/', null=True, blank=True),
         ),
     ]

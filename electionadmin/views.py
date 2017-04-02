@@ -95,13 +95,10 @@ def deletevoter(request, pk):
 @login_required
 def addcandidate(request):
     if request.method == 'POST':
-        uploaded_file_url = ''
+        myfile = None
         if request.FILES['photo']:
             myfile = request.FILES['photo']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            uploaded_file_url = fs.url(filename)
-        new = Candidate(name=request.POST['name'], nickname=request.POST['nickname'], description=request.POST['description'], photourl=uploaded_file_url)
+        new = Candidate(name=request.POST['name'], nickname=request.POST['nickname'], description=request.POST['description'], photo=myfile)
         new.save()
         messages.success(request, 'Successfully added candidate!')
     return redirect("/admin/")
@@ -115,10 +112,7 @@ def editcandidate(request):
         edit.nickname = request.POST['nickname']
         edit.description = request.POST['description']
         if request.FILES['photo']:
-            myfile = request.FILES['photo']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            edit.photourl = fs.url(filename)
+            edit.photo = request.FILES['photo']
         edit.save()
         messages.success(request, 'Successfully updated candidate!')
     return redirect("/admin/")
