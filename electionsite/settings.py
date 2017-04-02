@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'electionadmin',
     'electionvote',
+    's3_folder_storage',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,14 @@ EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
 EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Creds
+AWS_ACCESS_KEY_ID = 'QVV27QCDAJLHK7XIAIKA'[::-1]
+AWS_SECRET_ACCESS_KEY = 'j/nCuSpRsYsTxI+dJLU/POXzDE2vYKFcR/msz5mj'[::-1]
+AWS_STORAGE_BUCKET_NAME = 'simple-election'
+
+# Uploaded Media Folder
+DEFAULT_FILE_STORAGE = 's3_folder_storage.s3.DefaultStorage'
+DEFAULT_S3_PATH = "media"
+MEDIA_ROOT = '/%s/' % DEFAULT_S3_PATH
+MEDIA_URL = 'https://%s.s3.amazonaws.com/candidates/' % AWS_STORAGE_BUCKET_NAME
