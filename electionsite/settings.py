@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'electionadmin',
     'electionvote',
-    's3_folder_storage',
+    'django_s3_storage',
 ]
 
 MIDDLEWARE = [
@@ -158,12 +158,64 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # Creds
+AWS_REGION = "ap-southeast-1"
 AWS_ACCESS_KEY_ID = 'QVV27QCDAJLHK7XIAIKA'[::-1]
 AWS_SECRET_ACCESS_KEY = 'j/nCuSpRsYsTxI+dJLU/POXzDE2vYKFcR/msz5mj'[::-1]
-AWS_STORAGE_BUCKET_NAME = 'simple-election'
 
 # Uploaded Media Folder
-DEFAULT_FILE_STORAGE = 's3_folder_storage.s3.DefaultStorage'
-DEFAULT_S3_PATH = "media"
-MEDIA_ROOT = '/%s/' % DEFAULT_S3_PATH
-MEDIA_URL = 'https://%s.s3.amazonaws.com/candidates/' % AWS_STORAGE_BUCKET_NAME
+DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
+
+# The name of the bucket to store files in.
+AWS_S3_BUCKET_NAME = "simple-election"
+
+# How to construct S3 URLs ("auto", "path", "virtual").
+AWS_S3_ADDRESSING_STYLE = "auto"
+
+# The full URL to the S3 endpoint. Leave blank to use the default region URL.
+AWS_S3_ENDPOINT_URL = ""
+
+# A prefix to be applied to every stored file. This will be joined to every filename using the "/" separator.
+AWS_S3_KEY_PREFIX = ""
+
+# Whether to enable authentication for stored files. If True, then generated URLs will include an authentication
+# token valid for `AWS_S3_MAX_AGE_SECONDS`. If False, then generated URLs will not include an authentication token,
+# and their permissions will be set to "public-read".
+AWS_S3_BUCKET_AUTH = True
+
+# How long generated URLs are valid for. This affects the expiry of authentication tokens if `AWS_S3_BUCKET_AUTH`
+# is True. It also affects the "Cache-Control" header of the files.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_MAX_AGE_SECONDS = 60 * 60  # 1 hours.
+
+# A URL prefix to be used for generated URLs. This is useful if your bucket is served through a CDN. This setting
+# cannot be used with `AWS_S3_BUCKET_AUTH`.
+AWS_S3_PUBLIC_URL = ""
+
+# If True, then files will be stored with reduced redundancy. Check the S3 documentation and make sure you
+# understand the consequences before enabling.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_REDUCED_REDUNDANCY = False
+
+# The Content-Disposition header used when the file is downloaded. This can be a string, or a function taking a
+# single `name` argument.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_CONTENT_DISPOSITION = ""
+
+# The Content-Language header used when the file is downloaded. This can be a string, or a function taking a
+# single `name` argument.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_CONTENT_LANGUAGE = ""
+
+# A mapping of custom metadata for each file. Each value can be a string, or a function taking a
+# single `name` argument.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_METADATA = {}
+
+# If True, then files will be stored using server-side encryption.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_ENCRYPT_KEY = False
+
+# If True, then text files will be stored using gzip content encoding. Files will only be gzipped if their
+# compressed size is smaller than their uncompressed size.
+# Important: Changing this setting will not affect existing files.
+AWS_S3_GZIP = True
