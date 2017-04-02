@@ -5,3 +5,4 @@ waitress
 dj-database-url
 requests
 django-s3-storage
+Pillow
